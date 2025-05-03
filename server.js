@@ -1,54 +1,31 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const serverless = require('serverless-http');
 require('dotenv').config();
+const serverless = require('serverless-http');
+
 const userRoutes = require('./controllers/userController');
 
 const app = express();
 
-// CORS configuration
+// ✅ CORS setup
 app.use(cors({
-  origin: 'https://front-omega-mocha.vercel.app', // Allow frontend
-  credentials: true,
+  origin: 'https://vercel.com/comps-projects-9855a82b/front/BxN8NMpTJ2nVMDnK4DmtS6Hv8A5H',
+  credentials: true
 }));
 
+// ✅ Middleware
 app.use(express.json());
 
-// Test endpoint
-app.get('/', (req, res) => {
-  res.send('Server working properly');
-});
-
-
-
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// ✅ MongoDB connection
+mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch((err) => console.log('Error connecting to MongoDB:', err));
 
-
-mongoose.connection.on('connected', () => {
-  console.log('MongoDB connection established');
-});
-
-mongoose.connection.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
-});
-
-
-  app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
-    next();
-  });
-
-// Routes
+// ✅ Routes
 app.use('/api', userRoutes);
 
-// Countries / states / cities endpoints
+// ✅ Sample static data
 const countries = [
   { id: 'IN', name: 'India' },
   { id: 'US', name: 'USA' },
@@ -72,23 +49,24 @@ const cities = {
   NY: ['New York City', 'Buffalo'],
 };
 
+// ✅ Get all countries
 app.get('/api/countries', (req, res) => {
   res.json(countries);
 });
 
+// ✅ Get states for a country
 app.get('/api/states/:countryId', (req, res) => {
   const countryId = req.params.countryId;
   const result = states[countryId] || [];
   res.json(result);
 });
 
+// ✅ Get cities for a state
 app.get('/api/cities/:stateId', (req, res) => {
   const stateId = req.params.stateId;
   const result = cities[stateId] || [];
   res.json(result);
 });
 
-// Export as a serverless function handler
-module.exports = serverless(app);
-
-
+// ✅ Export as serverless handler for Vercel
+module.exports.handler = serverless(app);
