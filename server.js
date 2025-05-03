@@ -24,10 +24,26 @@ app.get('/', (req, res) => {
 
 
 mongoose.connect(process.env.MONGO_URI, {
-  
-}).then(() => console.log('Connected to MongoDB'))
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connection established');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
+    next();
+  });
 
 // Routes
 app.use('/api', userRoutes);
