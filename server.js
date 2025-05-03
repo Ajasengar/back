@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const serverless = require('serverless-http');
 require('dotenv').config();
 const userRoutes = require('./controllers/userController');
 
@@ -8,27 +9,32 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://front-omega-mocha.vercel.app', // Allow frontend requests
+  origin: 'https://front-omega-mocha.vercel.app', // Allow frontend
   credentials: true,
 }));
 
-// Middleware
 app.use(express.json());
 
-// Testing API endpoint
+// Test endpoint
 app.get('/', (req, res) => {
   res.send('Server working properly');
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.log('Error connecting to MongoDB:', err));
+// MongoDB connection (only connect once)
+let conn = null;
+const connectToDb = async () => {
+  if (!conn) {
+    conn = mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await conn;
+    console.log('Connected to MongoDB');
+  }
+};
+connectToDb().catch(err => console.log('Error connecting to MongoDB:', err));
 
 // Routes
 app.use('/api', userRoutes);
 
-// Sample data for countries, states, and cities
+// Countries / states / cities endpoints
 const countries = [
   { id: 'IN', name: 'India' },
   { id: 'US', name: 'USA' },
@@ -68,5 +74,5 @@ app.get('/api/cities/:stateId', (req, res) => {
   res.json(result);
 });
 
-// Vercel serverless function export
-module.exports = app;
+// Export as a serverless function handler
+module.exports = serverless(app);
