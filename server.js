@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 let conn = null;
 const connectToDb = async () => {
   if (!conn) {
-    conn = mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    conn = mongoose.connect('mongodb+srv://ajaysengar:evtddhOM7HPh5XZN@company.cinmt4s.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
     await conn;
     console.log('Connected to MongoDB');
   }
@@ -76,3 +76,5 @@ app.get('/api/cities/:stateId', (req, res) => {
 
 // Export as a serverless function handler
 module.exports = serverless(app);
+
+
