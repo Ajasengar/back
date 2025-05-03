@@ -9,11 +9,17 @@ const userRoutes = require('./controllers/userController');
 
 const app = express();
 
-app.use(cors({
-    origin: 'https://front-omega-mocha.vercel.app',
-    credentials: true
-  }));
 
+const corsMiddleware = cors({
+  origin: 'https://front-omega-mocha.vercel.app',
+  credentials: true,
+});
+
+module.exports = (req, res) => {
+  corsMiddleware(req, res, () => {
+    res.status(200).json({ message: 'API works!' });
+  });
+};
   
 // Middleware
 app.use(express.json());
