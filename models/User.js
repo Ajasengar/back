@@ -11,8 +11,8 @@ const addressSchema = new mongoose.Schema({
 // User Schema
 const userSchema = new mongoose.Schema({
   profilePhoto: {
-    data: Buffer,             // Store the image data in a buffer
-    contentType: String,      // Store the content type of the image
+    data: Buffer,             
+    contentType: String,      
   },
   username: { type: String, required: true, unique: true },
   currentPassword: { type: String, required: true },
@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema({
   address: { type: addressSchema},
   subscriptionPlan: { type: String, enum: ['Basic', 'Pro', 'Enterprise'], required: true },
   newsletter: { type: Boolean, default: true },
-  gender: { type: String, required: true },  // Added gender field
-  companyAddress: { type: String},  // Added company address field
+  gender: { type: String, required: true }, 
+  companyAddress: { type: String}, 
 }, { timestamps: true });
 
-// Validation for company name if profession is 'Entrepreneur'
+
 userSchema.pre('validate', function (next) {
   if (this.profession === 'Entrepreneur' && !this.companyName) {
     this.invalidate('companyName', 'Company Name is required for Entrepreneurs');

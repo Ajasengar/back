@@ -24,6 +24,12 @@ module.exports = (req, res) => {
 // Middleware
 app.use(express.json());
 
+//// testing api
+
+app.get('/', (req, res) => {
+  res.send('Server working Properly');
+})
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {  })
@@ -35,7 +41,7 @@ app.use('/api', userRoutes);
 
 
 
-// ✅ Sample static data (replace with MongoDB queries if needed)
+
 const countries = [
     { id: 'IN', name: 'India' },
     { id: 'US', name: 'USA' },
@@ -59,19 +65,19 @@ const countries = [
     NY: ['New York City', 'Buffalo'],
   };
   
-  // ✅ Get all countries
+
   app.get('/api/countries', (req, res) => {
     res.json(countries);
   });
   
-  // ✅ Get states for a country
+
   app.get('/api/states/:countryId', (req, res) => {
     const countryId = req.params.countryId;
     const result = states[countryId] || [];
     res.json(result);
   });
   
-  // ✅ Get cities for a state
+
   app.get('/api/cities/:stateId', (req, res) => {
     const stateId = req.params.stateId;
     const result = cities[stateId] || [];
