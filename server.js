@@ -10,7 +10,7 @@ const userRoutes = require('./controllers/userController');
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://front-omega-mocha.vercel.app',
     credentials: true
   }));
 
