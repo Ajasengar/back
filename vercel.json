@@ -7,11 +7,7 @@
       }
     ],
     "routes": [
-      { "src": "/api/countries", "dest": "/server.js" },
-      { "src": "/api/states/(.*)", "dest": "/server.js" },
-      { "src": "/api/cities/(.*)", "dest": "/server.js" },
-      { "src": "/api/(.*)", "dest": "/server.js" },
-      { "src": "/(.*)", "dest": "/server.js" }
+      { "src": "/api/(.*)", "dest": "/server.js" }
     ]
   }
   
